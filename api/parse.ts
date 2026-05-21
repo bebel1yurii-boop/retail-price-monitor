@@ -11,7 +11,9 @@ export default async function handler(req: ApiRequest, res: ApiResponse) {
     return;
   }
 
-  const { network, city, category } = req.body ?? {};
+  const network = typeof req.body?.network === 'string' ? req.body.network : '';
+  const city = typeof req.body?.city === 'string' ? req.body.city : '';
+  const category = typeof req.body?.category === 'string' ? req.body.category : '';
   if (!network || !city || !category) {
     res.status(400).json({ message: 'network, city and category are required' });
     return;
