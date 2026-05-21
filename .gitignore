@@ -8,3 +8,5 @@ logs/*.log
 .playwright-mcp/
 qa-*.png
 network-*.png
+
+.vercel

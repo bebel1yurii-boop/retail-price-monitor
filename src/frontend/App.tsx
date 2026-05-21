@@ -144,6 +144,22 @@ export default function App() {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ rows, errors })
     });
+    const contentType = response.headers.get('content-type') ?? '';
+    if (contentType.includes('spreadsheetml')) {
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const disposition = response.headers.get('content-disposition') ?? '';
+      const fileName = disposition.match(/filename="(.+?)"/)?.[1] ?? 'retail-prices.xlsx';
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = fileName;
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      window.URL.revokeObjectURL(url);
+      setExportUrl('');
+      return;
+    }
     const data = (await response.json()) as { downloadUrl: string };
     setExportUrl(data.downloadUrl);
     window.location.href = data.downloadUrl;

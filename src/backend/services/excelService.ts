@@ -28,6 +28,19 @@ const priceColumns = [
 
 export async function createExcelExport(rows: PriceRow[], errors: ParseError[]) {
   fs.mkdirSync(exportDir, { recursive: true });
+  const workbook = buildWorkbook(rows, errors);
+  const fileName = `retail-prices-${new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19)}.xlsx`;
+  const filePath = path.join(exportDir, fileName);
+  await workbook.xlsx.writeFile(filePath);
+  return { fileName, filePath, downloadUrl: `/exports/${fileName}` };
+}
+
+export async function createExcelBuffer(rows: PriceRow[], errors: ParseError[]) {
+  const workbook = buildWorkbook(rows, errors);
+  return workbook.xlsx.writeBuffer();
+}
+
+function buildWorkbook(rows: PriceRow[], errors: ParseError[]) {
   const workbook = new ExcelJS.Workbook();
   workbook.creator = 'Retail Price Monitor';
   workbook.created = new Date();
@@ -79,10 +92,7 @@ export async function createExcelExport(rows: PriceRow[], errors: ParseError[]) 
   ]);
   formatWorksheet(summary);
 
-  const fileName = `retail-prices-${new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19)}.xlsx`;
-  const filePath = path.join(exportDir, fileName);
-  await workbook.xlsx.writeFile(filePath);
-  return { fileName, filePath, downloadUrl: `/exports/${fileName}` };
+  return workbook;
 }
 
 function formatWorksheet(sheet: ExcelJS.Worksheet) {
