@@ -4,19 +4,14 @@
   "outputDirectory": "dist",
   "installCommand": "npm install",
   "functions": {
-    "api/index.ts": {
+    "api/parse.ts": {
+      "maxDuration": 60
+    },
+    "api/export.ts": {
       "maxDuration": 60
     }
   },
   "rewrites": [
-    {
-      "source": "/api/(.*)",
-      "destination": "/api/index.ts"
-    },
-    {
-      "source": "/exports/(.*)",
-      "destination": "/api/index.ts"
-    },
     {
       "source": "/(.*)",
       "destination": "/index.html"
