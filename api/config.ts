@@ -84,8 +84,16 @@ export default function handler(_req: unknown, res: { status: (code: number) => 
   res.status(200).json({
     networks: networks.map((network) => {
       const override = activeOverrides[network.network_name];
+      const enabledOnVercel = network.network_name === 'ФОРА';
       return override
-        ? { ...network, ...override, parser_status: 'active' }
+        ? {
+            ...network,
+            ...override,
+            parser_status: enabledOnVercel ? 'active' : 'inactive',
+            notes: enabledOnVercel
+              ? override.notes
+              : `${override.notes} На Vercel вимкнено: потрібен окремий backend worker/server для production parsing.`
+          }
         : { ...network, parser_type: 'manual', parser_status: 'inactive' };
     }),
     categories,
