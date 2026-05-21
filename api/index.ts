@@ -1,10 +1,24 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import type { IncomingMessage, ServerResponse } from 'node:http';
-import { findProductionAdapter } from '../src/backend/parsers/adapterConfigs';
-import type { NetworkConfig, ParseResult } from '../src/backend/types';
 
 type JsonBody = Record<string, unknown>;
+type ParserType = 'api' | 'html' | 'playwright' | 'manual';
+type NetworkConfig = {
+  network_name: string;
+  canonical_name: string;
+  website_url: string;
+  parser_type: ParserType;
+  supported_cities: string[];
+  supported_categories: string[];
+  notes: string;
+};
+type PriceRowSummary = {
+  regularPrice: number | null;
+  promoPrice: number | null;
+  discountPct: number | null;
+  promoFlag: 'так' | 'ні';
+};
 
 export default async function handler(req: IncomingMessage, res: ServerResponse) {
   try {
@@ -13,7 +27,7 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
       return sendJson(res, 200, { status: 'ok' });
     }
     if (req.method === 'GET' && url.pathname === '/api/config') {
-      return sendJson(res, 200, buildConfig());
+      return sendJson(res, 200, await buildConfig());
     }
     if (req.method === 'POST' && url.pathname === '/api/parse') {
       return await parsePrices(req, res);
@@ -30,7 +44,8 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
   }
 }
 
-function buildConfig() {
+async function buildConfig() {
+  const { findProductionAdapter } = await import('../src/backend/parsers/adapterConfigs');
   const networks = readJson<NetworkConfig[]>('src/backend/config/networks.json');
   const categories = readJson<string[]>('src/backend/config/categories.json');
   const cities = readJson<string[]>('src/backend/config/cities.json');
@@ -76,7 +91,7 @@ async function parsePrices(req: IncomingMessage, res: ServerResponse) {
   const parser = createParser({ network, city, category }, logger);
   const result = await parser.parse();
   const rows = deduplicateRows(result.rows);
-  const payload: ParseResult = {
+  const payload = {
     rows,
     errors: result.errors,
     logs: logger.getEntries(),
@@ -133,7 +148,7 @@ function deduplicateRows<T extends { network: string; city: string; sku: string;
   });
 }
 
-function buildSummary(rows: ParseResult['rows'], errorCount: number) {
+function buildSummary(rows: PriceRowSummary[], errorCount: number) {
   const avg = (values: Array<number | null>) => {
     const clean = values.filter((value): value is number => typeof value === 'number');
     return clean.length ? Number((clean.reduce((sum, value) => sum + value, 0) / clean.length).toFixed(2)) : null;
