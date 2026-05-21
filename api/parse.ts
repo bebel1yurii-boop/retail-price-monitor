@@ -1,4 +1,10 @@
-import { createParser } from '../src/backend/parsers/parserFactory';
+import { ForaCatalogParser } from '../src/backend/parsers/foraCatalogParser';
+import { GenericParser } from '../src/backend/parsers/genericParser';
+import { ThrashGraphqlParser } from '../src/backend/parsers/thrashGraphqlParser';
+import { VarusSearchParser } from '../src/backend/parsers/varusSearchParser';
+import { WoocommerceStoreParser } from '../src/backend/parsers/woocommerceStoreParser';
+import { ZakazApiParser } from '../src/backend/parsers/zakazApiParser';
+import { getZakazChainForNetwork } from '../src/backend/parsers/zakazChains';
 import { LoggerService } from '../src/backend/services/loggerService';
 import type { ParseResult } from '../src/backend/types';
 
@@ -22,7 +28,7 @@ export default async function handler(req: ApiRequest, res: ApiResponse) {
   const logger = new LoggerService();
   try {
     logger.info(`Parse requested: ${network} / ${city} / ${category}`);
-    const parser = createParser({ network, city, category }, logger);
+    const parser = createVercelParser({ network, city, category }, logger);
     const result = await parser.parse();
     const rows = deduplicateRows(result.rows);
     const payload: ParseResult = {
@@ -51,6 +57,17 @@ export default async function handler(req: ApiRequest, res: ApiResponse) {
       logs: logger.getEntries()
     });
   }
+}
+
+function createVercelParser(request: { network: string; city: string; category: string }, logger: LoggerService) {
+  const zakazChain = getZakazChainForNetwork(request.network);
+  if (zakazChain) return new ZakazApiParser(request, logger, zakazChain);
+  const normalized = request.network.toUpperCase();
+  if (normalized.includes('ВЕЛИКА КИШЕНЯ')) return new WoocommerceStoreParser(request, logger, 'https://kishenya.ua');
+  if (normalized.includes('ТРАШ')) return new ThrashGraphqlParser(request, logger);
+  if (normalized.includes('ФОРА')) return new ForaCatalogParser(request, logger);
+  if (normalized.includes('ВАРУС')) return new VarusSearchParser(request, logger);
+  return new GenericParser(request, logger);
 }
 
 function deduplicateRows<T extends { network: string; city: string; sku: string; packWeight: string }>(rows: T[]) {
