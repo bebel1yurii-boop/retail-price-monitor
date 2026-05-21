@@ -1,0 +1,10 @@
+node_modules/
+dist/
+dist-backend/
+exports/*.xlsx
+logs/*.log
+.env
+.cache/
+.playwright-mcp/
+qa-*.png
+network-*.png

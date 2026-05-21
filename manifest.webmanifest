@@ -1,0 +1,15 @@
+{
+  "name": "Retail Price Monitor",
+  "short_name": "Price Monitor",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f6f8fa",
+  "theme_color": "#0f8a3b",
+  "icons": [
+    {
+      "src": "/pwa-icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}

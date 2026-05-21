@@ -1,0 +1,254 @@
+[
+  {
+    "network_name": "АТБ МАРКЕТ",
+    "canonical_name": "АТБ МАРКЕТ",
+    "website_url": "https://www.atbmarket.com/",
+    "parser_type": "api",
+    "supported_cities": ["Київ", "Львів", "Дніпро", "Одеса", "Харків", "Запоріжжя"],
+    "supported_categories": ["М’ясо птиці", "Напівфабрикати", "М’ясо-ковбасні вироби"],
+    "notes": "Demo adapter в MVP; production потребує валідації endpoint-ів та mapping категорій."
+  },
+  {
+    "network_name": "МЕТРО",
+    "canonical_name": "МЕТРО",
+    "website_url": "https://metro.zakaz.ua/",
+    "parser_type": "html",
+    "supported_cities": ["Київ", "Львів", "Дніпро", "Одеса", "Харків"],
+    "supported_categories": ["М’ясо птиці", "Напівфабрикати", "М’ясо-ковбасні вироби"],
+    "notes": "Demo adapter в MVP; production краще будувати через публічний каталог/API, якщо доступний."
+  },
+  {
+    "network_name": "АШАН",
+    "canonical_name": "АШАН",
+    "website_url": "https://auchan.ua/",
+    "parser_type": "playwright",
+    "supported_cities": ["Київ", "Львів", "Дніпро", "Одеса", "Харків"],
+    "supported_categories": ["М’ясо птиці", "Напівфабрикати", "М’ясо-ковбасні вироби"],
+    "notes": "Demo adapter в MVP; production може потребувати Playwright через динамічний контент."
+  },
+  {
+    "network_name": "ВЕЛИКА КИШЕНЯ",
+    "canonical_name": "ВЕЛИКА КИШЕНЯ",
+    "website_url": "https://velikakishenya.ua/",
+    "parser_type": "manual",
+    "supported_cities": ["Київ"],
+    "supported_categories": ["М’ясо птиці", "Напівфабрикати", "М’ясо-ковбасні вироби"],
+    "notes": "Manual required до реалізації adapter."
+  },
+  {
+    "network_name": "ВАРУС",
+    "canonical_name": "ВАРУС",
+    "website_url": "https://varus.ua/",
+    "parser_type": "playwright",
+    "supported_cities": ["Київ", "Дніпро", "Запоріжжя"],
+    "supported_categories": ["М’ясо птиці", "Напівфабрикати", "М’ясо-ковбасні вироби"],
+    "notes": "Потрібен окремий adapter."
+  },
+  {
+    "network_name": "ДЕЛВІ",
+    "canonical_name": "ДЕЛВІ",
+    "website_url": "https://delvi.ua/",
+    "parser_type": "manual",
+    "supported_cities": ["Київ"],
+    "supported_categories": ["М’ясо птиці", "Напівфабрикати", "М’ясо-ковбасні вироби"],
+    "notes": "Manual required."
+  },
+  {
+    "network_name": "ФАЙНО МАРКЕТ",
+    "canonical_name": "ФАЙНО МАРКЕТ",
+    "website_url": "https://fayno.market/",
+    "parser_type": "manual",
+    "supported_cities": ["Кропивницький"],
+    "supported_categories": ["М’ясо птиці", "Напівфабрикати", "М’ясо-ковбасні вироби"],
+    "notes": "Manual required."
+  },
+  {
+    "network_name": "ВОСТОРГ",
+    "canonical_name": "ВОСТОРГ",
+    "website_url": "https://vostorg.ua/",
+    "parser_type": "manual",
+    "supported_cities": ["Харків"],
+    "supported_categories": ["М’ясо птиці", "Напівфабрикати", "М’ясо-ковбасні вироби"],
+    "notes": "Manual required."
+  },
+  {
+    "network_name": "КЛАС",
+    "canonical_name": "КЛАС",
+    "website_url": "https://klassmarket.ua/",
+    "parser_type": "manual",
+    "supported_cities": ["Харків"],
+    "supported_categories": ["М’ясо птиці", "Напівфабрикати", "М’ясо-ковбасні вироби"],
+    "notes": "Manual required."
+  },
+  {
+    "network_name": "ПОСАД",
+    "canonical_name": "ПОСАД",
+    "website_url": "https://posad.com.ua/",
+    "parser_type": "manual",
+    "supported_cities": ["Харків"],
+    "supported_categories": ["М’ясо птиці", "Напівфабрикати", "М’ясо-ковбасні вироби"],
+    "notes": "Manual required."
+  },
+  {
+    "network_name": "РОСТ",
+    "canonical_name": "РОСТ",
+    "website_url": "https://rost.kh.ua/",
+    "parser_type": "manual",
+    "supported_cities": ["Харків"],
+    "supported_categories": ["М’ясо птиці", "Напівфабрикати", "М’ясо-ковбасні вироби"],
+    "notes": "Manual required."
+  },
+  {
+    "network_name": "ЧУДО МАРКЕТ",
+    "canonical_name": "ЧУДО МАРКЕТ",
+    "website_url": "https://chudo-market.ua/",
+    "parser_type": "manual",
+    "supported_cities": ["Одеса"],
+    "supported_categories": ["М’ясо птиці", "Напівфабрикати", "М’ясо-ковбасні вироби"],
+    "notes": "Manual required."
+  },
+  {
+    "network_name": "ЕПІЦЕНТР",
+    "canonical_name": "ЕПІЦЕНТР",
+    "website_url": "https://epicentrk.ua/",
+    "parser_type": "html",
+    "supported_cities": ["Київ", "Львів", "Дніпро", "Одеса", "Харків"],
+    "supported_categories": ["М’ясо птиці", "Напівфабрикати", "М’ясо-ковбасні вироби"],
+    "notes": "Потрібен окремий adapter і food category mapping."
+  },
+  {
+    "network_name": "КОЛО",
+    "canonical_name": "КОЛО",
+    "website_url": "https://kolo-market.com/",
+    "parser_type": "manual",
+    "supported_cities": ["Київ"],
+    "supported_categories": ["М’ясо птиці", "Напівфабрикати", "М’ясо-ковбасні вироби"],
+    "notes": "Manual required."
+  },
+  {
+    "network_name": "МЕГА-МАРКЕТ",
+    "canonical_name": "МЕГА-МАРКЕТ",
+    "website_url": "https://megamarket.ua/",
+    "parser_type": "manual",
+    "supported_cities": ["Київ"],
+    "supported_categories": ["М’ясо птиці", "Напівфабрикати", "М’ясо-ковбасні вироби"],
+    "notes": "Manual required."
+  },
+  {
+    "network_name": "УЛЬТРАМАРКЕТ",
+    "canonical_name": "УЛЬТРАМАРКЕТ",
+    "website_url": "https://ultramarket.ua/",
+    "parser_type": "manual",
+    "supported_cities": ["Київ"],
+    "supported_categories": ["М’ясо птиці", "Напівфабрикати", "М’ясо-ковбасні вироби"],
+    "notes": "Manual required."
+  },
+  {
+    "network_name": "ІДЕАЛ",
+    "canonical_name": "ІДЕАЛ",
+    "website_url": "",
+    "parser_type": "manual",
+    "supported_cities": ["Київ"],
+    "supported_categories": ["М’ясо птиці", "Напівфабрикати", "М’ясо-ковбасні вироби"],
+    "notes": "Manual required."
+  },
+  {
+    "network_name": "КОПІЙКА",
+    "canonical_name": "КОПІЙКА",
+    "website_url": "https://kopeyka.ua/",
+    "parser_type": "manual",
+    "supported_cities": ["Одеса"],
+    "supported_categories": ["М’ясо птиці", "Напівфабрикати", "М’ясо-ковбасні вироби"],
+    "notes": "Manual required."
+  },
+  {
+    "network_name": "ТАВРІЯ В",
+    "canonical_name": "ТАВРІЯ В",
+    "website_url": "https://www.tavriav.ua/",
+    "parser_type": "playwright",
+    "supported_cities": ["Одеса", "Київ"],
+    "supported_categories": ["М’ясо птиці", "Напівфабрикати", "М’ясо-ковбасні вироби"],
+    "notes": "Потрібен окремий adapter."
+  },
+  {
+    "network_name": "ТОЧКА",
+    "canonical_name": "ТОЧКА",
+    "website_url": "",
+    "parser_type": "manual",
+    "supported_cities": ["Київ"],
+    "supported_categories": ["М’ясо птиці", "Напівфабрикати", "М’ясо-ковбасні вироби"],
+    "notes": "Manual required."
+  },
+  {
+    "network_name": "АРСЕН",
+    "canonical_name": "АРСЕН",
+    "website_url": "https://arsen.ua/",
+    "parser_type": "manual",
+    "supported_cities": ["Львів", "Івано-Франківськ"],
+    "supported_categories": ["М’ясо птиці", "Напівфабрикати", "М’ясо-ковбасні вироби"],
+    "notes": "Manual required."
+  },
+  {
+    "network_name": "БЛИЗЕНЬКО",
+    "canonical_name": "БЛИЗЕНЬКО",
+    "website_url": "https://blyzenko.ua/",
+    "parser_type": "manual",
+    "supported_cities": ["Львів"],
+    "supported_categories": ["М’ясо птиці", "Напівфабрикати", "М’ясо-ковбасні вироби"],
+    "notes": "Manual required."
+  },
+  {
+    "network_name": "РУКАВИЧКА",
+    "canonical_name": "РУКАВИЧКА",
+    "website_url": "https://rukavychka.ua/",
+    "parser_type": "manual",
+    "supported_cities": ["Львів"],
+    "supported_categories": ["М’ясо птиці", "Напівфабрикати", "М’ясо-ковбасні вироби"],
+    "notes": "Manual required."
+  },
+  {
+    "network_name": "СІМ 23",
+    "canonical_name": "СІМ 23",
+    "website_url": "https://sim23.ua/",
+    "parser_type": "manual",
+    "supported_cities": ["Луцьк"],
+    "supported_categories": ["М’ясо птиці", "Напівфабрикати", "М’ясо-ковбасні вироби"],
+    "notes": "Manual required."
+  },
+  {
+    "network_name": "НОВУС",
+    "canonical_name": "НОВУС",
+    "website_url": "https://novus.online/",
+    "parser_type": "playwright",
+    "supported_cities": ["Київ"],
+    "supported_categories": ["М’ясо птиці", "Напівфабрикати", "М’ясо-ковбасні вироби"],
+    "notes": "Generic/manual MVP; production adapter потрібен."
+  },
+  {
+    "network_name": "ФОЗЗІ",
+    "canonical_name": "ФОЗЗІ",
+    "website_url": "https://fozzyshop.ua/",
+    "parser_type": "manual",
+    "supported_cities": ["Київ"],
+    "supported_categories": ["М’ясо птиці", "Напівфабрикати", "М’ясо-ковбасні вироби"],
+    "notes": "Generic/manual MVP; production adapter потрібен."
+  },
+  {
+    "network_name": "ФОРА",
+    "canonical_name": "ФОРА",
+    "website_url": "https://fora.ua/",
+    "parser_type": "playwright",
+    "supported_cities": ["Київ"],
+    "supported_categories": ["М’ясо птиці", "Напівфабрикати", "М’ясо-ковбасні вироби"],
+    "notes": "Generic/manual MVP; production adapter потрібен."
+  },
+  {
+    "network_name": "ТРАШ",
+    "canonical_name": "ТРАШ",
+    "website_url": "https://thrash.ua/",
+    "parser_type": "manual",
+    "supported_cities": ["Київ"],
+    "supported_categories": ["М’ясо птиці", "Напівфабрикати", "М’ясо-ковбасні вироби"],
+    "notes": "Manual required."
+  }
+]
