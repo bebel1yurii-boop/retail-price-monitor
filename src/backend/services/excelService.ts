@@ -23,7 +23,31 @@ const priceColumns = [
   ['Promo End Date', 'promoEndDate'],
   ['Product URL', 'productUrl'],
   ['Comment', 'comment'],
-  ['Source Status', 'sourceStatus']
+  ['Source Status', 'sourceStatus'],
+  ['External SKU ID', 'externalSkuId'],
+  ['EAN', 'ean'],
+  ['Unit Price', 'unitPrice'],
+  ['Unit Price Basis', 'unitPriceBasis'],
+  ['Availability Status', 'availabilityStatus'],
+  ['Stock Quantity', 'stockQuantity'],
+  ['Delivery Available', 'deliveryAvailable'],
+  ['Pickup Available', 'pickupAvailable'],
+  ['Store Name', 'storeName'],
+  ['Store Address', 'storeAddress'],
+  ['Country of Origin', 'countryOfOrigin'],
+  ['Product Composition', 'productComposition'],
+  ['Promo Mechanic', 'promoMechanic'],
+  ['Loyalty Price', 'loyaltyPrice'],
+  ['Minimum Promo Quantity', 'minimumPromoQuantity'],
+  ['Online Exclusive', 'onlineExclusive'],
+  ['Category Position', 'categoryPosition'],
+  ['Search Position', 'searchPosition'],
+  ['Image Count', 'imageCount'],
+  ['Card Completeness %', 'cardCompletenessPct'],
+  ['Rating', 'rating'],
+  ['Review Count', 'reviewCount'],
+  ['Badges', 'badges'],
+  ['Extended Mode', 'extendedMode']
 ] as const;
 
 export async function createExcelExport(rows: PriceRow[], errors: ParseError[]) {
@@ -52,6 +76,7 @@ function buildWorkbook(rows: PriceRow[], errors: ParseError[]) {
   prices.getColumn('J').numFmt = '#,##0.00';
   prices.getColumn('K').numFmt = '#,##0.00';
   prices.getColumn('L').numFmt = '0.0';
+  prices.getColumn('U').numFmt = '#,##0.00';
 
   const errorSheet = workbook.addWorksheet('Errors');
   errorSheet.columns = [
@@ -91,6 +116,63 @@ function buildWorkbook(rows: PriceRow[], errors: ParseError[]) {
     ...Object.entries(byNetwork)
   ]);
   formatWorksheet(summary);
+
+  const availability = workbook.addWorksheet('Availability');
+  availability.columns = [
+    { header: 'Collection Date', key: 'collectionDate', width: 18 },
+    { header: 'Network', key: 'network', width: 18 },
+    { header: 'City', key: 'city', width: 18 },
+    { header: 'External SKU ID', key: 'externalSkuId', width: 18 },
+    { header: 'EAN', key: 'ean', width: 18 },
+    { header: 'SKU', key: 'sku', width: 42 },
+    { header: 'Availability Status', key: 'availabilityStatus', width: 22 },
+    { header: 'Stock Quantity', key: 'stockQuantity', width: 16 },
+    { header: 'Delivery Available', key: 'deliveryAvailable', width: 18 },
+    { header: 'Pickup Available', key: 'pickupAvailable', width: 18 },
+    { header: 'Store Name', key: 'storeName', width: 24 },
+    { header: 'Store Address', key: 'storeAddress', width: 36 }
+  ];
+  availability.addRows(rows);
+  formatWorksheet(availability);
+
+  const promotions = workbook.addWorksheet('Promotions');
+  promotions.columns = [
+    { header: 'Collection Date', key: 'collectionDate', width: 18 },
+    { header: 'Network', key: 'network', width: 18 },
+    { header: 'City', key: 'city', width: 18 },
+    { header: 'SKU', key: 'sku', width: 42 },
+    { header: 'Regular Price', key: 'regularPrice', width: 16 },
+    { header: 'Promo Price', key: 'promoPrice', width: 16 },
+    { header: 'Discount %', key: 'discountPct', width: 14 },
+    { header: 'Promo Flag', key: 'promoFlag', width: 14 },
+    { header: 'Promo Mechanic', key: 'promoMechanic', width: 22 },
+    { header: 'Loyalty Price', key: 'loyaltyPrice', width: 16 },
+    { header: 'Minimum Promo Quantity', key: 'minimumPromoQuantity', width: 20 },
+    { header: 'Promo Start Date', key: 'promoStartDate', width: 18 },
+    { header: 'Promo End Date', key: 'promoEndDate', width: 18 }
+  ];
+  promotions.addRows(rows.filter((row) => row.promoFlag === 'так'));
+  formatWorksheet(promotions);
+
+  const digitalShelf = workbook.addWorksheet('Digital Shelf');
+  digitalShelf.columns = [
+    { header: 'Collection Date', key: 'collectionDate', width: 18 },
+    { header: 'Network', key: 'network', width: 18 },
+    { header: 'City', key: 'city', width: 18 },
+    { header: 'SKU', key: 'sku', width: 42 },
+    { header: 'Category Source', key: 'categorySource', width: 32 },
+    { header: 'Category Position', key: 'categoryPosition', width: 18 },
+    { header: 'Search Position', key: 'searchPosition', width: 16 },
+    { header: 'Image URL', key: 'imageUrl', width: 50 },
+    { header: 'Image Count', key: 'imageCount', width: 14 },
+    { header: 'Card Completeness %', key: 'cardCompletenessPct', width: 20 },
+    { header: 'Rating', key: 'rating', width: 12 },
+    { header: 'Review Count', key: 'reviewCount', width: 14 },
+    { header: 'Badges', key: 'badges', width: 24 },
+    { header: 'Product URL', key: 'productUrl', width: 50 }
+  ];
+  digitalShelf.addRows(rows);
+  formatWorksheet(digitalShelf);
 
   return workbook;
 }

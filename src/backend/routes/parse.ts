@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import { createParser } from '../parsers/parserFactory';
+import { enrichRows } from '../services/extendedEnrichmentService';
 import { LoggerService } from '../services/loggerService';
 import type { ParseResult } from '../types';
 
@@ -7,7 +8,7 @@ export const parseRouter = Router();
 
 parseRouter.post('/', async (req, res) => {
   const logger = new LoggerService();
-  const { network, city, category } = req.body ?? {};
+  const { network, city, category, extended = false } = req.body ?? {};
   if (!network || !city || !category) {
     res.status(400).json({ message: 'network, city and category are required' });
     return;
@@ -17,7 +18,9 @@ parseRouter.post('/', async (req, res) => {
     logger.info(`Parse requested: ${network} / ${city} / ${category}`);
     const parser = createParser({ network, city, category }, logger);
     const result = await parser.parse();
-    const rows = deduplicateRows(result.rows);
+    const parsedRows = deduplicateRows(result.rows);
+    const rows = extended ? enrichRows(parsedRows) : parsedRows;
+    if (extended) logger.info(`${network}: extended enrichment applied to ${rows.length} SKU`);
     const summary = buildSummary(rows, result.errors.length);
     const payload: ParseResult = {
       rows,

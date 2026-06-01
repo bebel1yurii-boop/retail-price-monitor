@@ -229,6 +229,15 @@ select {
   color: #fff;
 }
 
+.button-extended {
+  background: #0f6674;
+  color: #fff;
+}
+
+:root[data-theme='dark'] .button-extended {
+  background: #177887;
+}
+
 .button-secondary {
   background: var(--surface-2);
   color: var(--text);

@@ -5,6 +5,7 @@ export interface ParseRequest {
   network: string;
   city: string;
   category: string;
+  extended?: boolean;
 }
 
 export interface PriceRow {
@@ -27,6 +28,30 @@ export interface PriceRow {
   imageUrl?: string;
   comment: string;
   sourceStatus: SourceStatus;
+  externalSkuId?: string;
+  ean?: string;
+  unitPrice?: number | null;
+  unitPriceBasis?: string;
+  availabilityStatus?: string;
+  stockQuantity?: number | null;
+  deliveryAvailable?: string;
+  pickupAvailable?: string;
+  storeName?: string;
+  storeAddress?: string;
+  countryOfOrigin?: string;
+  productComposition?: string;
+  promoMechanic?: string;
+  loyaltyPrice?: number | null;
+  minimumPromoQuantity?: number | null;
+  onlineExclusive?: string;
+  categoryPosition?: number | null;
+  searchPosition?: number | null;
+  imageCount?: number | null;
+  cardCompletenessPct?: number | null;
+  rating?: number | null;
+  reviewCount?: number | null;
+  badges?: string;
+  extendedMode?: 'так' | 'ні';
 }
 
 export interface ParseError {

@@ -32,6 +32,7 @@ export default async function handler(req: ApiRequest, res: ApiResponse) {
   const network = typeof req.body?.network === 'string' ? req.body.network : '';
   const city = typeof req.body?.city === 'string' ? req.body.city : '';
   const category = typeof req.body?.category === 'string' ? req.body.category : '';
+  const extended = req.body?.extended === true;
   if (!network || !city || !category) {
     res.status(400).json({ message: 'network, city and category are required' });
     return;
@@ -83,11 +84,12 @@ export default async function handler(req: ApiRequest, res: ApiResponse) {
   }
 
   const deduped = dedupeRows(rows).filter((row) => matchesGroup(row.sku, category));
+  const outputRows = extended ? enrichRows(deduped) : deduped;
   res.status(200).json({
-    rows: deduped,
+    rows: outputRows,
     errors,
     logs,
-    summary: buildSummary(deduped, errors.length)
+    summary: buildSummary(outputRows, errors.length)
   });
 }
 
@@ -188,6 +190,56 @@ function dedupeRows<T extends { sku: string; productUrl: string }>(rows: T[]) {
     seen.add(key);
     return true;
   });
+}
+
+function enrichRows<T extends ReturnType<typeof normalizeForaProduct>>(rows: T[]) {
+  return rows.map((row, index) => {
+    const pack = parsePack(row.packWeight || row.sku);
+    const currentPrice = row.promoPrice ?? row.regularPrice;
+    return {
+      ...row,
+      externalSkuId: row.comment.match(/\bid=([a-z0-9_-]+)/i)?.[1] ?? '',
+      ean: '',
+      unitPrice: currentPrice !== null && pack ? Number((currentPrice / pack.quantity).toFixed(2)) : null,
+      unitPriceBasis: pack?.basis ?? '',
+      availabilityStatus: 'доступно онлайн',
+      stockQuantity: null,
+      deliveryAvailable: '',
+      pickupAvailable: '',
+      storeName: '',
+      storeAddress: '',
+      countryOfOrigin: '',
+      productComposition: '',
+      promoMechanic: row.promoFlag === 'так' ? 'цінова знижка' : '',
+      loyaltyPrice: null,
+      minimumPromoQuantity: null,
+      onlineExclusive: '',
+      categoryPosition: index + 1,
+      searchPosition: null,
+      imageCount: row.imageUrl ? 1 : 0,
+      cardCompletenessPct: calculateCompleteness([row.sku, row.categorySource, row.manufacturer, row.brand, row.packWeight, row.regularPrice, row.productUrl, row.imageUrl]),
+      rating: null,
+      reviewCount: null,
+      badges: '',
+      extendedMode: 'так'
+    };
+  });
+}
+
+function parsePack(value: string) {
+  const match = value.match(/(\d+(?:[,.]\d+)?)\s*(кг|г|гр|л|мл)/i);
+  if (!match) return null;
+  const quantity = Number.parseFloat(match[1].replace(',', '.'));
+  const unit = match[2].toLowerCase();
+  if (!Number.isFinite(quantity) || quantity <= 0) return null;
+  if (unit === 'г' || unit === 'гр') return { quantity: quantity / 1000, basis: 'за кг' };
+  if (unit === 'мл') return { quantity: quantity / 1000, basis: 'за л' };
+  return { quantity, basis: unit === 'кг' ? 'за кг' : 'за л' };
+}
+
+function calculateCompleteness(values: unknown[]) {
+  const filled = values.filter((value) => value !== '' && value !== null && value !== undefined).length;
+  return Math.round((filled / values.length) * 100);
 }
 
 function buildSummary(rows: Array<{ regularPrice: number | null; promoPrice: number | null; discountPct: number | null; promoFlag: string }>, errorCount: number) {

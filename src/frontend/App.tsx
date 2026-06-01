@@ -3,6 +3,7 @@ import { Activity, AlertTriangle, Moon, RefreshCw, ShieldCheck, SunMedium } from
 import { CategorySelect } from './components/CategorySelect';
 import { CitySelect } from './components/CitySelect';
 import { ExportButton } from './components/ExportButton';
+import { ExtendedParserButton } from './components/ExtendedParserButton';
 import { LogPanel } from './components/LogPanel';
 import { ImportButton } from './components/ImportButton';
 import { NetworkSelect } from './components/NetworkSelect';
@@ -78,13 +79,14 @@ export default function App() {
     if (visibleCategories.length && !visibleCategories.includes(category)) setCategory(visibleCategories[0]);
   }, [category, visibleCategories]);
 
-  async function runParser() {
+  async function runParser(extended = false) {
+    const runLabel = extended ? 'Розширений' : 'Стандартний';
     setRunning(true);
     setProgress(8);
     setExportUrl('');
     setRows([]);
     setErrors([]);
-    setLogs([`Batch запуск: ${runnableNetworks.map((item) => item.network_name).join(', ')} / ${city} / ${category}`]);
+    setLogs([`${runLabel} batch запуск: ${runnableNetworks.map((item) => item.network_name).join(', ')} / ${city} / ${category}`]);
     const allRows: PriceRow[] = [];
     const allErrors: ParseError[] = [];
     const allLogs: string[] = [];
@@ -108,7 +110,7 @@ export default function App() {
         const response = await fetch('/api/parse', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ network: item.network_name, city, category })
+          body: JSON.stringify({ network: item.network_name, city, category, extended })
         });
         if (!response.ok) throw new Error(`${item.network_name}: API error ${response.status}`);
         const result = (await response.json()) as ParseResult;
@@ -122,7 +124,7 @@ export default function App() {
       }
       setRows(allRows);
       setErrors(allErrors);
-      setLogs([...allLogs, `Batch завершено: ${allRows.length} SKU, ${allErrors.length} errors`]);
+      setLogs([...allLogs, `${runLabel} batch завершено: ${allRows.length} SKU, ${allErrors.length} errors`]);
       setProgress(100);
     } catch (error) {
       setErrors([
@@ -214,7 +216,8 @@ export default function App() {
           <NetworkSelect networks={config.networks} value={networks} onChange={setNetworks} />
           <CitySelect cities={visibleCities} value={city} onChange={setCity} />
           <CategorySelect categories={visibleCategories} value={category} onChange={setCategory} />
-          <RunParserButton disabled={running || !runnableNetworks.length || !city || !category} onClick={runParser} />
+          <RunParserButton disabled={running || !runnableNetworks.length || !city || !category} onClick={() => void runParser(false)} />
+          <ExtendedParserButton disabled={running || !runnableNetworks.length || !city || !category} onClick={() => void runParser(true)} />
           <ExportButton disabled={!rows.length || running} onClick={exportExcel} />
           <ImportButton disabled={running} onImport={importExcel} />
           {runnableNetworks.length > 0 && (
