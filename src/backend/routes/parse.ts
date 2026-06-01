@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import { createParser } from '../parsers/parserFactory';
+import { filterRowsByCategory } from '../services/categoryValidationService';
 import { enrichRows } from '../services/extendedEnrichmentService';
 import { LoggerService } from '../services/loggerService';
 import type { ParseResult } from '../types';
@@ -19,7 +20,10 @@ parseRouter.post('/', async (req, res) => {
     const parser = createParser({ network, city, category }, logger);
     const result = await parser.parse();
     const parsedRows = deduplicateRows(result.rows);
-    const rows = extended ? enrichRows(parsedRows) : parsedRows;
+    const validatedRows = filterRowsByCategory(parsedRows, category);
+    const excludedCount = parsedRows.length - validatedRows.length;
+    if (excludedCount) logger.info(`${network}: category validation excluded ${excludedCount} unrelated SKU`);
+    const rows = extended ? enrichRows(validatedRows) : validatedRows;
     if (extended) logger.info(`${network}: extended enrichment applied to ${rows.length} SKU`);
     const summary = buildSummary(rows, result.errors.length);
     const payload: ParseResult = {

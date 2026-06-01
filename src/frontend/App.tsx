@@ -18,7 +18,7 @@ interface AppConfig {
   cities: string[];
 }
 
-const storageKey = 'retail-price-monitor:last-result';
+const storageKey = 'retail-price-monitor:last-result:v2';
 
 export default function App() {
   const [config, setConfig] = useState<AppConfig>({ networks: [], categories: [], cities: [] });

@@ -59,7 +59,7 @@ export default async function handler(req: ApiRequest, res: ApiResponse) {
     return;
   }
 
-  const rows = Array.isArray(req.body?.rows) ? req.body.rows : [];
+  const rows = Array.isArray(req.body?.rows) ? filterRowsByCategory(req.body.rows) : [];
   const errors = Array.isArray(req.body?.errors) ? req.body.errors : [];
   const workbook = buildWorkbook(rows, errors);
   const buffer = await workbook.xlsx.writeBuffer();
@@ -204,4 +204,18 @@ function countBy(rows: Array<Record<string, unknown>>, key: string) {
     acc[value] = (acc[value] ?? 0) + 1;
     return acc;
   }, {});
+}
+
+function filterRowsByCategory(rows: unknown[]) {
+  return rows.filter((row) => {
+    if (!row || typeof row !== 'object') return false;
+    const record = row as Record<string, unknown>;
+    const sku = String(record.sku ?? '').toLowerCase();
+    const category = String(record.categoryGroup ?? '').toLowerCase();
+    if (/(приправа|спец|прянощ|соус|зі смаком|смаком кур|бульйон|вермішел|локшин|пюре|яйц|корм|ласощ|для кот|для кіш|для собак|кошен|цуцен|cat|dog|pet|шампун|насіння|оливк|джем|рахат|вафл|батончик|хумус|перець|сік|напій)/i.test(sku)) return false;
+    if (category.includes('напів')) return /(напівфаб|пельмен|вареник|котлет|нагетс|чебурек|млинц|бендерик|хінкал|равіол|тефтел|фрикадел|шніцел|зраз|голубц)/i.test(sku);
+    if (category.includes('ковбас')) return /(ковбас|сосиск|сардель|шинка|балик|буженин|салям|делікатес|бекон|карбонад|корейк|грудинк|пастром)/i.test(sku);
+    if (/(пельмен|вареник|котлет|нагетс|чебурек|млинц|бендерик|хінкал|равіол|ковбас|сосиск|сардель|шинка|балик|делікатес|рулет|закуска|сендвіч|бургер|піца|паштет|по-домашньому|гриль|запеч|смажен|відвар|теріякі|з рисом|в соусі|у соусі)/i.test(sku)) return false;
+    return /(курк|курча|куряч|індич|індюк|качк|качен|перепіл|філе|стегн|крил|гоміл|грудк|четвертин|ніжк|тушк|фарш|печін|серц|шлунк)/i.test(sku);
+  });
 }
