@@ -17,14 +17,16 @@ interface AppConfig {
   cities: string[];
 }
 
+const storageKey = 'retail-price-monitor:last-result';
+
 export default function App() {
   const [config, setConfig] = useState<AppConfig>({ networks: [], categories: [], cities: [] });
   const [networks, setNetworks] = useState<string[]>([]);
   const [city, setCity] = useState('');
   const [category, setCategory] = useState('');
-  const [rows, setRows] = useState<PriceRow[]>([]);
-  const [errors, setErrors] = useState<ParseError[]>([]);
-  const [logs, setLogs] = useState<string[]>([]);
+  const [rows, setRows] = useState<PriceRow[]>(() => readStoredResult().rows);
+  const [errors, setErrors] = useState<ParseError[]>(() => readStoredResult().errors);
+  const [logs, setLogs] = useState<string[]>(() => readStoredResult().logs);
   const [progress, setProgress] = useState(0);
   const [running, setRunning] = useState(false);
   const [exportUrl, setExportUrl] = useState('');
@@ -46,6 +48,10 @@ export default function App() {
   useEffect(() => {
     document.documentElement.dataset.theme = dark ? 'dark' : 'light';
   }, [dark]);
+
+  useEffect(() => {
+    window.localStorage.setItem(storageKey, JSON.stringify({ rows, errors, logs }));
+  }, [rows, errors, logs]);
 
   useEffect(() => {
     if (!running) return;
@@ -253,4 +259,19 @@ function average(values: Array<number | null>) {
 
 function unique(values: string[]) {
   return Array.from(new Set(values.filter(Boolean)));
+}
+
+function readStoredResult(): Pick<ParseResult, 'rows' | 'errors' | 'logs'> {
+  try {
+    const stored = window.localStorage.getItem(storageKey);
+    if (!stored) return { rows: [], errors: [], logs: [] };
+    const parsed = JSON.parse(stored) as Partial<Pick<ParseResult, 'rows' | 'errors' | 'logs'>>;
+    return {
+      rows: Array.isArray(parsed.rows) ? parsed.rows : [],
+      errors: Array.isArray(parsed.errors) ? parsed.errors : [],
+      logs: Array.isArray(parsed.logs) ? parsed.logs : []
+    };
+  } catch {
+    return { rows: [], errors: [], logs: [] };
+  }
 }
