@@ -11,7 +11,10 @@ export function ResultsTable({ rows }: Props) {
     <section className="table-panel">
       <div className="section-title">
         <h2>Результати збору</h2>
-        <span>{rows.length} SKU</span>
+        <div className="section-title-meta">
+          {extended && <span className="mode-badge">Розширений режим</span>}
+          <span>{rows.length} SKU</span>
+        </div>
       </div>
       <div className="table-wrap">
         <table>
@@ -29,17 +32,13 @@ export function ResultsTable({ rows }: Props) {
               <th>Рег. ціна</th>
               <th>Промо</th>
               <th>Знижка</th>
-              {extended && <th>SKU ID</th>}
-              {extended && <th>Ціна за одиницю</th>}
-              {extended && <th>Наявність</th>}
-              {extended && <th>Позиція</th>}
               <th>Статус</th>
             </tr>
           </thead>
           <tbody>
             {rows.length === 0 && (
               <tr>
-                <td colSpan={extended ? 17 : 13} className="empty-cell">
+                <td colSpan={13} className="empty-cell">
                   Запустіть парсинг, щоб побачити результати.
                 </td>
               </tr>
@@ -58,10 +57,6 @@ export function ResultsTable({ rows }: Props) {
                 <td>{formatPrice(row.regularPrice)}</td>
                 <td>{formatPrice(row.promoPrice)}</td>
                 <td>{row.discountPct !== null ? `${row.discountPct}%` : '-'}</td>
-                {extended && <td>{row.externalSkuId || '-'}</td>}
-                {extended && <td>{row.unitPrice !== null && row.unitPrice !== undefined ? `${formatPrice(row.unitPrice)} ${row.unitPriceBasis}` : '-'}</td>}
-                {extended && <td>{row.availabilityStatus || '-'}</td>}
-                {extended && <td>{row.categoryPosition ?? '-'}</td>}
                 <td>
                   <span className={`status status-${statusClass(row.sourceStatus)}`}>{row.sourceStatus}</span>
                 </td>

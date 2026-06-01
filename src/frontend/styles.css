@@ -372,6 +372,23 @@ select {
   font-weight: 700;
 }
 
+.section-title-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.section-title .mode-badge {
+  padding: 4px 7px;
+  border-radius: 6px;
+  background: rgba(15, 102, 116, 0.12);
+  color: #0f6674;
+}
+
+:root[data-theme='dark'] .section-title .mode-badge {
+  color: #69c7d4;
+}
+
 .table-wrap {
   overflow: auto;
   max-height: 46vh;

@@ -1,18 +1,22 @@
 import { Router } from 'express';
-import { createExcelBuffer } from '../services/excelService';
+import path from 'node:path';
+import { createExcelExport } from '../services/excelService';
 import type { ParseError, PriceRow } from '../types';
 
 export const exportRouter = Router();
+
+exportRouter.get('/download/:fileName', (req, res) => {
+  const fileName = path.basename(req.params.fileName);
+  const filePath = path.resolve(process.cwd(), 'exports', fileName);
+  res.download(filePath, fileName);
+});
 
 exportRouter.post('/', async (req, res) => {
   const rows = (req.body?.rows ?? []) as PriceRow[];
   const errors = (req.body?.errors ?? []) as ParseError[];
   try {
-    const buffer = await createExcelBuffer(rows, errors);
-    const fileName = `retail-prices-${new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19)}.xlsx`;
-    res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-    res.setHeader('Content-Disposition', `attachment; filename="${fileName}"`);
-    res.send(Buffer.from(buffer));
+    const result = await createExcelExport(rows, errors);
+    res.json({ downloadUrl: `/api/export/download/${encodeURIComponent(result.fileName)}`, fileName: result.fileName });
   } catch (error) {
     res.status(500).json({ message: error instanceof Error ? error.message : String(error) });
   }
