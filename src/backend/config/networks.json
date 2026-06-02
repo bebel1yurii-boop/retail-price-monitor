@@ -277,6 +277,20 @@
     "notes": "Manual required."
   },
   {
+    "network_name": "СІЛЬПО",
+    "canonical_name": "СІЛЬПО",
+    "website_url": "https://silpo.ua/category/m-iaso-4411",
+    "parser_type": "manual",
+    "supported_cities": ["Київ", "Львів", "Дніпро", "Одеса", "Харків", "Запоріжжя"],
+    "supported_categories": ["М’ясо птиці", "Напівфабрикати", "М’ясо-ковбасні вироби"],
+    "category_urls": {
+      "М’ясо птиці": ["https://silpo.ua/category/m-iaso-ptytsi-4412"],
+      "Напівфабрикати": ["https://silpo.ua/category/m-iasni-napivfabrykaty-4422"],
+      "М’ясо-ковбасні вироби": ["https://silpo.ua/category/kovbasni-vyroby-i-m-iasni-delikatesy-4731"]
+    },
+    "notes": "Офіційні leaf-категорії підтверджені. Server-side HTTP і стандартний Playwright через системний Edge отримують Cloudflare security check. Потрібен погоджений API/feed, ручний Excel import або окремо затверджений browser workflow."
+  },
+  {
     "network_name": "АТБ (GOTOSHOP ПРОМО)",
     "canonical_name": "АТБ",
     "source_group": "gotoshop-promo",

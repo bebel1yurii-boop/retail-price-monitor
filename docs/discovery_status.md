@@ -25,6 +25,7 @@
 | Мережа | Що знайдено | Наступний крок |
 |---|---|---|
 | АТБ | `HTTP 403` для server-side search URLs | Legal API/feed/manual import |
+| СІЛЬПО | Офіційні leaf-категорії підтверджені; server-side HTTP і стандартний Playwright отримують Cloudflare security check | Погоджений API/feed, manual import або затверджений browser workflow |
 | СІМ 23 / СІМІ | `https://simi.ua/lystivka/`: публічна листівка як image pages, без PDF та структурованого SKU API | OCR workflow з ручною перевіркою або manual Excel import |
 
 `СІМ 23 / СІМІ`: локальна команда `npm run parse:simi-leaflet` кешує публічні image pages і створює Excel review export. OCR-блоки не вважаються підтвердженими SKU через обмежену якість розпізнавання кирилиці.
