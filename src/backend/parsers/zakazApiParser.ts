@@ -57,6 +57,24 @@ const cityMap: Record<string, string[]> = {
   'Івано-Франківськ': ['ivanofrankivsk']
 };
 
+const cityNameBySlug: Record<string, string> = {
+  kiev: 'Київ',
+  kyiv: 'Київ',
+  lviv: 'Львів',
+  dnipro: 'Дніпро',
+  odesa: 'Одеса',
+  kharkiv: 'Харків',
+  zaporizhzhia: 'Запоріжжя',
+  vinnytsia: 'Вінниця',
+  poltava: 'Полтава',
+  ivanofrankivsk: 'Івано-Франківськ'
+};
+
+const fallbackCityByRetailChain: Record<string, string> = {
+  chudomarket: 'Одеса',
+  vostorg: 'Харків'
+};
+
 const metroCategoryIds: Record<string, string[]> = {
   poultry: ['chicken-metro', 'frozen-chicken-metro', 'frozen-turkey-metro', 'frozen-duck-metro', 'common-quail-metro'],
   semifinished: ['refrigerated-semis-metro', 'half-made-food-metro'],
@@ -81,6 +99,15 @@ export class ZakazApiParser extends BaseParser {
         rows: [],
         errors: [this.buildError(this.apiBase, 'STORE_NOT_FOUND', `Zakaz store not found for ${this.retailChain} / ${this.request.city}`, true)]
       };
+    }
+    const effectiveCity =
+      cityNameBySlug[store.city] ??
+      cityNameBySlug[store.region_id] ??
+      store.city ??
+      fallbackCityByRetailChain[this.retailChain] ??
+      this.request.city;
+    if (effectiveCity !== this.request.city) {
+      this.logger.info(`${this.request.network}: у місті ${this.request.city} немає точки Zakaz, використовую ${effectiveCity}`);
     }
 
     const categoryIds = await this.getCategoryIds(store.id);
@@ -111,7 +138,7 @@ export class ZakazApiParser extends BaseParser {
       }
     }
 
-    const rows = rawProducts.map((product) => normalizeProduct(product, this.request));
+    const rows = rawProducts.map((product) => normalizeProduct(product, { ...this.request, city: effectiveCity }));
     return { rows: dedupeRows(rows), errors };
   }
 

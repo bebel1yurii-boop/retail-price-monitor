@@ -92,25 +92,13 @@ export default function App() {
     const allLogs: string[] = [];
     try {
       for (const [index, item] of runnableNetworks.entries()) {
-        if (item.supported_cities.length && !item.supported_cities.includes(city)) {
-          allErrors.push({
-            date: new Date().toISOString(),
-            network: item.network_name,
-            city,
-            category,
-            url: item.website_url,
-            errorType: 'UNSUPPORTED_CITY',
-            errorText: `${item.network_name} не підтримує місто ${city} у поточній конфігурації`,
-            manualReview: true
-          });
-          continue;
-        }
-
-        setLogs((current) => [...current, `Старт мережі ${index + 1}/${runnableNetworks.length}: ${item.network_name}`]);
+        const networkCity = item.supported_cities.length && !item.supported_cities.includes(city) ? item.supported_cities[0] : city;
+        const fallbackLog = networkCity !== city ? `${item.network_name}: у місті ${city} немає точки, використовую ${networkCity}` : '';
+        setLogs((current) => [...current, ...(fallbackLog ? [fallbackLog] : []), `Старт мережі ${index + 1}/${runnableNetworks.length}: ${item.network_name} / ${networkCity}`]);
         const response = await fetch('/api/parse', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ network: item.network_name, city, category, extended })
+          body: JSON.stringify({ network: item.network_name, city: networkCity, category, extended })
         });
         if (!response.ok) throw new Error(`${item.network_name}: API error ${response.status}`);
         const result = (await response.json()) as ParseResult;
