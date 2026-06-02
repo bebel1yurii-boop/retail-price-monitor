@@ -84,6 +84,8 @@ export interface NetworkConfig {
   canonical_name: string;
   source_group?: string;
   website_url: string;
+  leaflet_url?: string;
+  leaflet_format?: 'image_pages' | 'pdf';
   parser_type: ParserType;
   supported_cities: string[];
   supported_categories: string[];

@@ -49,7 +49,7 @@ export const productionAdapters: ProductionAdapterConfig[] = [
   adapter('АРСЕН', [], 'https://arsen.ua', 'manual', []),
   adapter('БЛИЗЕНЬКО', [], 'https://blyzenko.ua', 'manual', [], 'Public WordPress API exposes promo posts and banners, but no confirmed SKU catalog with product-level prices. OCR workflow or manual Excel import is required.'),
   adapter('РУКАВИЧКА', [], 'https://market.rukavychka.ua', 'html', [], 'OpenCart HTML adapter: public category pages, pagination, regular and promo prices, product code, images and SKU-level dedupe.'),
-  adapter('СІМ 23', [], 'https://sim23.ua', 'manual', []),
+  adapter('СІМ 23', ['СІМІ', 'SIMI'], 'https://simi.ua/lystivka/', 'manual', [], 'Official СІМІ promo leaflet is published as image pages without a PDF, structured SKU catalog or price API. A dedicated OCR workflow with manual review or manual Excel import is required.'),
   adapter('НОВУС', ['NOVUS'], 'https://stores-api.zakaz.ua', 'api', []),
   adapter('ФОЗЗІ', ['FOZZY'], 'https://fozzyshop.ua', 'playwright', [], 'Playwright DOM adapter: public category pages, pagination, product cards, conservative throttling. Direct HTTP may return 403, so manual review fallback remains required.'),
   adapter('ФОРА', ['FORA'], 'https://api.catalog.ecom.fora.ua/api/2.0/exec/EcomCatalogGlobal', 'api', [], 'EcomCatalogGlobal adapter: GetSimpleCatalogItems with public catalog parameters.'),

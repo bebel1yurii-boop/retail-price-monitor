@@ -25,6 +25,7 @@
 | Мережа | Що знайдено | Наступний крок |
 |---|---|---|
 | АТБ | `HTTP 403` для server-side search URLs | Legal API/feed/manual import |
+| СІМ 23 / СІМІ | `https://simi.ua/lystivka/`: публічна листівка як image pages, без PDF та структурованого SKU API | OCR workflow з ручною перевіркою або manual Excel import |
 
 ## Велика Кишеня
 

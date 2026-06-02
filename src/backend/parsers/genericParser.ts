@@ -5,7 +5,14 @@ import type { ParseError, PriceRow } from '../types';
 export class GenericParser extends BaseParser {
   async parse(): Promise<{ rows: PriceRow[]; errors: ParseError[] }> {
     const isAtb = this.request.network.toUpperCase().includes('АТБ');
-    this.logger.warn(isAtb ? `${this.request.network}: public server-side access is blocked or not available` : `${this.request.network}: parser adapter is not implemented`);
+    const isSimi = ['СІМ 23', 'СІМІ', 'SIMI'].some((name) => this.request.network.toUpperCase().includes(name));
+    this.logger.warn(
+      isAtb
+        ? `${this.request.network}: public server-side access is blocked or not available`
+        : isSimi
+          ? `${this.request.network}: public leaflet contains image pages only; OCR workflow is required`
+          : `${this.request.network}: parser adapter is not implemented`
+    );
     if (process.env.DEMO_MODE !== 'true') {
       return {
         rows: [],
@@ -15,10 +22,12 @@ export class GenericParser extends BaseParser {
             network: this.request.network,
             city: this.request.city,
             category: this.request.category,
-            url: '',
-            errorType: isAtb ? 'SITE_BLOCKED_PUBLIC_ACCESS' : 'MANUAL_REQUIRED',
+            url: isSimi ? 'https://simi.ua/lystivka/' : '',
+            errorType: isAtb ? 'SITE_BLOCKED_PUBLIC_ACCESS' : isSimi ? 'LEAFLET_OCR_REQUIRED' : 'MANUAL_REQUIRED',
             errorText: isAtb
               ? 'АТБ повертає HTTP 403 на серверний доступ до публічного каталогу. Не виконуємо обхід блокування. Потрібен легальний API/partner feed, ручний Excel import або затверджений браузерний workflow.'
+              : isSimi
+                ? 'Офіційна листівка СІМІ опублікована як набір зображень без PDF, структурованого SKU-каталогу або API цін. Потрібен окремий OCR workflow з ручною перевіркою або ручний Excel import.'
               : 'Публічний каталог/API не налаштований або не підтверджений. Використайте ручний Excel import або додайте network-specific adapter.',
             manualReview: true
           }

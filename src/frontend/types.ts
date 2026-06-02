@@ -3,6 +3,8 @@ export interface NetworkConfig {
   canonical_name: string;
   source_group?: string;
   website_url: string;
+  leaflet_url?: string;
+  leaflet_format?: 'image_pages' | 'pdf';
   parser_type: 'api' | 'html' | 'playwright' | 'manual';
   parser_status?: 'active' | 'inactive';
   supported_cities: string[];

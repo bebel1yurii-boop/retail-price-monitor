@@ -232,11 +232,13 @@
   {
     "network_name": "СІМ 23",
     "canonical_name": "СІМ 23",
-    "website_url": "https://sim23.ua/",
+    "website_url": "https://simi.ua/lystivka/",
+    "leaflet_url": "https://simi.ua/lystivka/",
+    "leaflet_format": "image_pages",
     "parser_type": "manual",
     "supported_cities": ["Луцьк"],
     "supported_categories": ["М’ясо птиці", "Напівфабрикати", "М’ясо-ковбасні вироби"],
-    "notes": "Manual required."
+    "notes": "Офіційна промо-листівка СІМІ доступна як набір зображень без PDF, структурованого SKU-каталогу або API цін. Для автоматичного збору потрібен окремий OCR workflow з ручною перевіркою; доступний ручний Excel import."
   },
   {
     "network_name": "НОВУС",
