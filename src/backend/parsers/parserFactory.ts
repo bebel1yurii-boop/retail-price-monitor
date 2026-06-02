@@ -18,6 +18,7 @@ import { FozzyPlaywrightParser } from './fozzyPlaywrightParser';
 import { FaynoDiscountParser } from './faynoDiscountParser';
 import { KlassMarketParser } from './klassMarketParser';
 import { RostMarketParser } from './rostMarketParser';
+import { KopiykaParser } from './kopiykaParser';
 import type { BaseParser } from './baseParser';
 import type { LoggerService } from '../services/loggerService';
 import type { ParseRequest } from '../types';
@@ -51,6 +52,9 @@ export function createParser(request: ParseRequest, logger: LoggerService): Base
     }
     if (request.network.toUpperCase().includes('РОСТ')) {
       return new RostMarketParser(request, logger);
+    }
+    if (request.network.toUpperCase().includes('КОПІЙКА')) {
+      return new KopiykaParser(request, logger);
     }
     const config = findProductionAdapter(request.network);
     if (config?.parserType === 'html' || config?.parserType === 'api') {

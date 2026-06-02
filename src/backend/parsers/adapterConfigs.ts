@@ -43,7 +43,7 @@ export const productionAdapters: ProductionAdapterConfig[] = [
   adapter('МЕГА-МАРКЕТ', [], 'https://stores-api.zakaz.ua', 'api', []),
   adapter('УЛЬТРАМАРКЕТ', [], 'https://stores-api.zakaz.ua', 'api', []),
   adapter('ІДЕАЛ', [], 'https://stores-api.zakaz.ua', 'api', []),
-  adapter('КОПІЙКА', [], 'https://kopeyka.ua', 'manual', []),
+  adapter('КОПІЙКА', [], 'https://kopiyka.ua', 'html', [], 'Embedded JSON adapter: public category pages, product prices, promotions, stock amount, images and SKU-level dedupe.'),
   adapter('ТАВРІЯ В', [], 'https://stores-api.zakaz.ua', 'api', []),
   adapter('ТОЧКА', [], '', 'manual', []),
   adapter('АРСЕН', [], 'https://arsen.ua', 'manual', []),

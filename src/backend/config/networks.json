@@ -178,11 +178,11 @@
   {
     "network_name": "КОПІЙКА",
     "canonical_name": "КОПІЙКА",
-    "website_url": "https://kopeyka.ua/",
-    "parser_type": "manual",
+    "website_url": "https://kopiyka.ua/",
+    "parser_type": "html",
     "supported_cities": ["Одеса"],
     "supported_categories": ["М’ясо птиці", "Напівфабрикати", "М’ясо-ковбасні вироби"],
-    "notes": "Manual required."
+    "notes": "Embedded JSON adapter: public category pages, product prices, promotions, stock amount, images and SKU-level dedupe."
   },
   {
     "network_name": "ТАВРІЯ В",
