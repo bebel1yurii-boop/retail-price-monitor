@@ -17,7 +17,14 @@ const commonQueries = {
 };
 
 export const productionAdapters: ProductionAdapterConfig[] = [
-  adapter('АТБ МАРКЕТ', ['АТБ'], 'https://www.atbmarket.com', 'manual', []),
+  adapter(
+    'АТБ МАРКЕТ',
+    ['АТБ'],
+    'https://www.atbmarket.com',
+    'manual',
+    [],
+    'Official category URLs confirmed, but server-side HTTP and standard Playwright access receive Cloudflare 403. Use an approved partner feed, manual Excel import or a separately approved browser workflow.'
+  ),
   adapter('МЕТРО', ['METRO'], 'https://stores-api.zakaz.ua', 'api', []),
   adapter('АШАН', ['AUCHAN'], 'https://stores-api.zakaz.ua', 'api', []),
   adapter('ВЕЛИКА КИШЕНЯ', [], 'https://kishenya.ua', 'api', [], 'WooCommerce Store API adapter: /wp-json/wc/store/products. Partial coverage depends on search terms and promo catalog.'),

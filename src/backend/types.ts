@@ -87,5 +87,6 @@ export interface NetworkConfig {
   parser_type: ParserType;
   supported_cities: string[];
   supported_categories: string[];
+  category_urls?: Record<string, string[]>;
   notes: string;
 }

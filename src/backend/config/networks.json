@@ -3,10 +3,15 @@
     "network_name": "АТБ МАРКЕТ",
     "canonical_name": "АТБ МАРКЕТ",
     "website_url": "https://www.atbmarket.com/",
-    "parser_type": "api",
+    "parser_type": "manual",
     "supported_cities": ["Київ", "Львів", "Дніпро", "Одеса", "Харків", "Запоріжжя"],
     "supported_categories": ["М’ясо птиці", "Напівфабрикати", "М’ясо-ковбасні вироби"],
-    "notes": "Demo adapter в MVP; production потребує валідації endpoint-ів та mapping категорій."
+    "category_urls": {
+      "М’ясо птиці": ["https://www.atbmarket.com/catalog/344-m-yaso-okholodzhene"],
+      "Напівфабрикати": ["https://www.atbmarket.com/catalog/421-m-yasni-napivfabrikati"],
+      "М’ясо-ковбасні вироби": ["https://www.atbmarket.com/catalog/360-kovbasa-i-m-yasni-delikatesi"]
+    },
+    "notes": "Official category URLs confirmed, but server-side HTTP and standard Playwright access receive Cloudflare 403. Use an approved partner feed, manual Excel import or a separately approved browser workflow."
   },
   {
     "network_name": "МЕТРО",
