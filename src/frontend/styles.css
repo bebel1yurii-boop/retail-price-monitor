@@ -204,6 +204,24 @@ select {
   cursor: not-allowed;
 }
 
+.network-group {
+  display: grid;
+  gap: 6px;
+}
+
+.network-group + .network-group {
+  margin-top: 4px;
+  padding-top: 10px;
+  border-top: 1px solid var(--border);
+}
+
+.network-group-label {
+  padding: 2px 8px;
+  color: var(--muted);
+  font-size: 11px;
+  text-transform: uppercase;
+}
+
 .button {
   width: 100%;
   min-height: 42px;

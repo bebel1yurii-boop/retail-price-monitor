@@ -82,6 +82,7 @@ export interface ParseResult {
 export interface NetworkConfig {
   network_name: string;
   canonical_name: string;
+  source_group?: string;
   website_url: string;
   parser_type: ParserType;
   supported_cities: string[];

@@ -268,5 +268,35 @@
     "supported_cities": ["Київ"],
     "supported_categories": ["М’ясо птиці", "Напівфабрикати", "М’ясо-ковбасні вироби"],
     "notes": "Manual required."
+  },
+  {
+    "network_name": "АТБ (GOTOSHOP ПРОМО)",
+    "canonical_name": "АТБ",
+    "source_group": "gotoshop-promo",
+    "website_url": "https://gotoshop.ua/kiev/shops/atb/",
+    "parser_type": "manual",
+    "supported_cities": ["Київ"],
+    "supported_categories": ["М’ясо птиці", "Напівфабрикати", "М’ясо-ковбасні вироби"],
+    "notes": "Окреме GoToShop promo-джерело. Серверний HTTP та Playwright доступ блокуються Cloudflare 403. Потрібен дозволений browser/OCR workflow або ручний Excel import."
+  },
+  {
+    "network_name": "СІЛЬПО (GOTOSHOP ПРОМО)",
+    "canonical_name": "СІЛЬПО",
+    "source_group": "gotoshop-promo",
+    "website_url": "https://gotoshop.ua/kiev/shops/silpo/",
+    "parser_type": "manual",
+    "supported_cities": ["Київ"],
+    "supported_categories": ["М’ясо птиці", "Напівфабрикати", "М’ясо-ковбасні вироби"],
+    "notes": "Окреме GoToShop promo-джерело. Серверний HTTP та Playwright доступ блокуються Cloudflare 403. Потрібен дозволений browser/OCR workflow або ручний Excel import."
+  },
+  {
+    "network_name": "ДЕЛВІ (GOTOSHOP ПРОМО)",
+    "canonical_name": "ДЕЛВІ",
+    "source_group": "gotoshop-promo",
+    "website_url": "https://gotoshop.ua/kiev/shops/delvi/",
+    "parser_type": "manual",
+    "supported_cities": ["Київ"],
+    "supported_categories": ["М’ясо птиці", "Напівфабрикати", "М’ясо-ковбасні вироби"],
+    "notes": "Окреме GoToShop promo-джерело. Серверний HTTP та Playwright доступ блокуються Cloudflare 403. Потрібен дозволений browser/OCR workflow або ручний Excel import."
   }
 ]

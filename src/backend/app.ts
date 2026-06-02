@@ -24,7 +24,7 @@ export function createApp() {
   app.get('/api/config', (_req, res) =>
     res.json({
       networks: networks.map((network) => {
-        const adapter = findProductionAdapter(network.network_name);
+        const adapter = network.source_group === 'gotoshop-promo' ? undefined : findProductionAdapter(network.network_name);
         return adapter
           ? {
               ...network,
