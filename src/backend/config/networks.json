@@ -56,11 +56,11 @@
   {
     "network_name": "ФАЙНО МАРКЕТ",
     "canonical_name": "ФАЙНО МАРКЕТ",
-    "website_url": "https://fayno.market/",
-    "parser_type": "manual",
+    "website_url": "https://fayno.market/discounts",
+    "parser_type": "html",
     "supported_cities": ["Кропивницький"],
     "supported_categories": ["М’ясо птиці", "Напівфабрикати", "М’ясо-ковбасні вироби"],
-    "notes": "Manual required."
+    "notes": "Public promo-only HTML adapter: fayno.market/discounts. Parses currently published discount cards; regular catalog is not publicly exposed."
   },
   {
     "network_name": "ВОСТОРГ",

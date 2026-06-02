@@ -15,6 +15,7 @@ import { ThrashGraphqlParser } from './thrashGraphqlParser';
 import { ForaCatalogParser } from './foraCatalogParser';
 import { VarusSearchParser } from './varusSearchParser';
 import { FozzyPlaywrightParser } from './fozzyPlaywrightParser';
+import { FaynoDiscountParser } from './faynoDiscountParser';
 import type { BaseParser } from './baseParser';
 import type { LoggerService } from '../services/loggerService';
 import type { ParseRequest } from '../types';
@@ -39,6 +40,9 @@ export function createParser(request: ParseRequest, logger: LoggerService): Base
     }
     if (request.network.toUpperCase().includes('ФОЗЗІ')) {
       return new FozzyPlaywrightParser(request, logger);
+    }
+    if (request.network.toUpperCase().includes('ФАЙНО МАРКЕТ')) {
+      return new FaynoDiscountParser(request, logger);
     }
     const config = findProductionAdapter(request.network);
     if (config?.parserType === 'html' || config?.parserType === 'api') {

@@ -23,7 +23,7 @@ export const productionAdapters: ProductionAdapterConfig[] = [
   adapter('ВЕЛИКА КИШЕНЯ', [], 'https://kishenya.ua', 'api', [], 'WooCommerce Store API adapter: /wp-json/wc/store/products. Partial coverage depends on search terms and promo catalog.'),
   adapter('ВАРУС', ['VARUS'], 'https://varus.ua/api/catalog/vue_storefront_catalog_2/product_v2/_search', 'api', [], 'Vue Storefront search adapter: Multisearch IDs + product_v2 catalog details.'),
   adapter('ДЕЛВІ', ['DELVI'], 'https://delvi.ua', 'manual', []),
-  adapter('ФАЙНО МАРКЕТ', [], 'https://fayno.market', 'manual', []),
+  adapter('ФАЙНО МАРКЕТ', [], 'https://fayno.market/discounts', 'html', [], 'Public promo-only HTML adapter: fayno.market/discounts. Parses currently published discount cards; regular catalog is not publicly exposed.'),
   adapter('ВОСТОРГ', [], 'https://stores-api.zakaz.ua', 'api', []),
   adapter('ЕКО МАРКЕТ', ['EKOMARKET'], 'https://stores-api.zakaz.ua', 'api', []),
   adapter('ТОРБА', ['TORBA'], 'https://stores-api.zakaz.ua', 'api', []),
