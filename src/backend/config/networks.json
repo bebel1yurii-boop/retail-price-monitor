@@ -72,6 +72,24 @@
     "notes": "Manual required."
   },
   {
+    "network_name": "ЕКО МАРКЕТ",
+    "canonical_name": "ЕКО МАРКЕТ",
+    "website_url": "https://stores-api.zakaz.ua/",
+    "parser_type": "api",
+    "supported_cities": ["Київ"],
+    "supported_categories": ["М’ясо птиці", "Напівфабрикати", "М’ясо-ковбасні вироби"],
+    "notes": "Zakaz Stores API adapter."
+  },
+  {
+    "network_name": "ТОРБА",
+    "canonical_name": "ТОРБА",
+    "website_url": "https://stores-api.zakaz.ua/",
+    "parser_type": "api",
+    "supported_cities": ["Рівне"],
+    "supported_categories": ["М’ясо птиці", "Напівфабрикати", "М’ясо-ковбасні вироби"],
+    "notes": "Zakaz Stores API adapter."
+  },
+  {
     "network_name": "КЛАС",
     "canonical_name": "КЛАС",
     "website_url": "https://klassmarket.ua/",

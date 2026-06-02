@@ -6,6 +6,8 @@ export const zakazChainByNetwork: Array<{ network: string; chain: string }> = [
   { network: 'МЕГА-МАРКЕТ', chain: 'megamarket' },
   { network: 'УЛЬТРАМАРКЕТ', chain: 'ultramarket' },
   { network: 'ВОСТОРГ', chain: 'vostorg' },
+  { network: 'ЕКО МАРКЕТ', chain: 'ekomarket' },
+  { network: 'ТОРБА', chain: 'torba' },
   { network: 'ЧУДО МАРКЕТ', chain: 'chudomarket' },
   { network: 'ЕПІЦЕНТР', chain: 'epicentr' },
   { network: 'ІДЕАЛ', chain: 'ideal' }

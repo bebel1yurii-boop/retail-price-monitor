@@ -54,6 +54,7 @@ const cityMap: Record<string, string[]> = {
   Запоріжжя: ['zaporizhzhia'],
   Вінниця: ['vinnytsia'],
   Полтава: ['poltava'],
+  Рівне: ['rivne'],
   'Івано-Франківськ': ['ivanofrankivsk']
 };
 
@@ -67,11 +68,14 @@ const cityNameBySlug: Record<string, string> = {
   zaporizhzhia: 'Запоріжжя',
   vinnytsia: 'Вінниця',
   poltava: 'Полтава',
+  rivne: 'Рівне',
   ivanofrankivsk: 'Івано-Франківськ'
 };
 
 const fallbackCityByRetailChain: Record<string, string> = {
   chudomarket: 'Одеса',
+  ekomarket: 'Київ',
+  torba: 'Рівне',
   vostorg: 'Харків'
 };
 

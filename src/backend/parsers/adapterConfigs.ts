@@ -25,6 +25,8 @@ export const productionAdapters: ProductionAdapterConfig[] = [
   adapter('ДЕЛВІ', ['DELVI'], 'https://delvi.ua', 'manual', []),
   adapter('ФАЙНО МАРКЕТ', [], 'https://fayno.market', 'manual', []),
   adapter('ВОСТОРГ', [], 'https://stores-api.zakaz.ua', 'api', []),
+  adapter('ЕКО МАРКЕТ', ['EKOMARKET'], 'https://stores-api.zakaz.ua', 'api', []),
+  adapter('ТОРБА', ['TORBA'], 'https://stores-api.zakaz.ua', 'api', []),
   adapter('КЛАС', [], 'https://klassmarket.ua', 'manual', []),
   adapter('ПОСАД', [], 'https://posad.com.ua', 'manual', []),
   adapter('РОСТ', [], 'https://rost.kh.ua', 'manual', []),
