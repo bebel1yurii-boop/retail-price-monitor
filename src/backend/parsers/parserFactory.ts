@@ -19,6 +19,7 @@ import { FaynoDiscountParser } from './faynoDiscountParser';
 import { KlassMarketParser } from './klassMarketParser';
 import { RostMarketParser } from './rostMarketParser';
 import { KopiykaParser } from './kopiykaParser';
+import { RukavychkaParser } from './rukavychkaParser';
 import type { BaseParser } from './baseParser';
 import type { LoggerService } from '../services/loggerService';
 import type { ParseRequest } from '../types';
@@ -55,6 +56,9 @@ export function createParser(request: ParseRequest, logger: LoggerService): Base
     }
     if (request.network.toUpperCase().includes('КОПІЙКА')) {
       return new KopiykaParser(request, logger);
+    }
+    if (request.network.toUpperCase().includes('РУКАВИЧКА')) {
+      return new RukavychkaParser(request, logger);
     }
     const config = findProductionAdapter(request.network);
     if (config?.parserType === 'html' || config?.parserType === 'api') {

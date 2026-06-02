@@ -218,16 +218,16 @@
     "parser_type": "manual",
     "supported_cities": ["Львів"],
     "supported_categories": ["М’ясо птиці", "Напівфабрикати", "М’ясо-ковбасні вироби"],
-    "notes": "Manual required."
+    "notes": "Public WordPress API exposes promo posts and banners, but no confirmed SKU catalog with product-level prices. OCR workflow or manual Excel import is required."
   },
   {
     "network_name": "РУКАВИЧКА",
     "canonical_name": "РУКАВИЧКА",
-    "website_url": "https://rukavychka.ua/",
-    "parser_type": "manual",
+    "website_url": "https://market.rukavychka.ua/",
+    "parser_type": "html",
     "supported_cities": ["Львів"],
     "supported_categories": ["М’ясо птиці", "Напівфабрикати", "М’ясо-ковбасні вироби"],
-    "notes": "Manual required."
+    "notes": "OpenCart HTML adapter: public category pages, pagination, regular and promo prices, product code, images and SKU-level dedupe."
   },
   {
     "network_name": "СІМ 23",
