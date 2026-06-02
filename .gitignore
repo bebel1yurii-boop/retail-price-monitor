@@ -5,6 +5,7 @@ exports/*.xlsx
 logs/*.log
 .env
 .cache/
+__pycache__/
 .playwright-mcp/
 qa-*.png
 network-*.png

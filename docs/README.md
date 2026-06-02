@@ -85,6 +85,23 @@ NETWORK="АТБ МАРКЕТ" CITY="Київ" CATEGORY="М’ясо птиці" 
 retail-prices-YYYY-MM-DDTHH-MM-SS.xlsx
 ```
 
+## Simi leaflet OCR review
+
+`СІМ 23 / СІМІ` publishes a public leaflet as image pages without a structured SKU catalog or price API. Use the local review export:
+
+```bash
+python -m pip install -r scripts/requirements-simi-ocr.txt
+npm run parse:simi-leaflet
+```
+
+For a quick controlled test:
+
+```bash
+npm run parse:simi-leaflet -- --limit-pages 1
+```
+
+The command creates `/exports/simi-leaflet-review-YYYY-MM-DDTHH-MM-SS.xlsx` with sheets `Leaflet Pages`, `OCR Review`, `Errors`, `Summary`. OCR blocks are review material, not validated SKU rows.
+
 ## Production adapters
 
 За замовчуванням app працює у production-first режимі:

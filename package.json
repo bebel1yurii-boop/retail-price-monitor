@@ -10,6 +10,7 @@
     "build": "node ./node_modules/typescript/bin/tsc && node ./node_modules/vite/bin/vite.js build",
     "preview": "node ./node_modules/vite/bin/vite.js preview --host 0.0.0.0",
     "parse": "node ./node_modules/tsx/dist/cli.mjs src/backend/cli/parse.ts",
+    "parse:simi-leaflet": "python scripts/simi_leaflet_ocr.py",
     "start": "node ./node_modules/tsx/dist/cli.mjs src/backend/server.ts"
   },
   "dependencies": {
