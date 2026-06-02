@@ -30,7 +30,7 @@
     "network_name": "ВЕЛИКА КИШЕНЯ",
     "canonical_name": "ВЕЛИКА КИШЕНЯ",
     "website_url": "https://velikakishenya.ua/",
-    "parser_type": "manual",
+    "parser_type": "playwright",
     "supported_cities": ["Київ"],
     "supported_categories": ["М’ясо птиці", "Напівфабрикати", "М’ясо-ковбасні вироби"],
     "notes": "Manual required до реалізації adapter."
@@ -93,10 +93,10 @@
     "network_name": "КЛАС",
     "canonical_name": "КЛАС",
     "website_url": "https://klassmarket.ua/",
-    "parser_type": "manual",
+    "parser_type": "playwright",
     "supported_cities": ["Харків"],
     "supported_categories": ["М’ясо птиці", "Напівфабрикати", "М’ясо-ковбасні вироби"],
-    "notes": "Manual required."
+    "notes": "Playwright DOM adapter: public leaf category pages with browser-cookie challenge, pagination and SKU-level dedupe."
   },
   {
     "network_name": "ПОСАД",
@@ -105,16 +105,16 @@
     "parser_type": "manual",
     "supported_cities": ["Харків"],
     "supported_categories": ["М’ясо птиці", "Напівфабрикати", "М’ясо-ковбасні вироби"],
-    "notes": "Manual required."
+    "notes": "Public site exposes promotions and newspapers, but no confirmed SKU catalog with product-level prices. OCR workflow or manual Excel import is required."
   },
   {
     "network_name": "РОСТ",
     "canonical_name": "РОСТ",
-    "website_url": "https://rost.kh.ua/",
-    "parser_type": "manual",
+    "website_url": "https://rostmarket.com.ua/",
+    "parser_type": "html",
     "supported_cities": ["Харків"],
     "supported_categories": ["М’ясо птиці", "Напівфабрикати", "М’ясо-ковбасні вироби"],
-    "notes": "Manual required."
+    "notes": "Magento HTML adapter: public category pages, pagination, regular and promo prices, SKU-level dedupe."
   },
   {
     "network_name": "ЧУДО МАРКЕТ",
