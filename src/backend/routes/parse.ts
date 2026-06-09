@@ -35,7 +35,7 @@ parseRouter.post('/', async (req, res) => {
     res.json(payload);
   } catch (error) {
     logger.error(error instanceof Error ? error.message : String(error));
-    res.status(500).json({
+    const payload: ParseResult = {
       rows: [],
       errors: [
         {
@@ -49,8 +49,10 @@ parseRouter.post('/', async (req, res) => {
           manualReview: true
         }
       ],
-      logs: logger.getEntries()
-    });
+      logs: logger.getEntries(),
+      summary: buildSummary([], 1)
+    };
+    res.json(payload);
   }
 });
 

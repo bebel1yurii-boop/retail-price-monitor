@@ -19,6 +19,9 @@ interface AppConfig {
 }
 
 const storageKey = 'retail-price-monitor:last-result:v2';
+const configTimeoutMs = 15000;
+const parseTimeoutMs = 180000;
+const exportTimeoutMs = 120000;
 
 export default function App() {
   const [config, setConfig] = useState<AppConfig>({ networks: [], categories: [], cities: [] });
@@ -34,8 +37,7 @@ export default function App() {
   const [dark, setDark] = useState(false);
 
   useEffect(() => {
-    fetch('/api/config')
-      .then((response) => response.json())
+    fetchJsonWithTimeout<AppConfig>('/api/config', { timeoutMs: configTimeoutMs, retries: 2 })
       .then((data: AppConfig) => {
         setConfig(data);
         const firstActive = data.networks.find((item) => item.parser_status !== 'inactive')?.network_name;
@@ -43,7 +45,7 @@ export default function App() {
         setCity(data.cities[0] ?? '');
         setCategory(data.categories[0] ?? '');
       })
-      .catch(() => setLogs((current) => [...current, 'Не вдалося завантажити конфігурацію']));
+      .catch((error) => setLogs((current) => [...current, `Не вдалося завантажити конфігурацію API: ${error instanceof Error ? error.message : String(error)}`]));
   }, []);
 
   useEffect(() => {
@@ -81,6 +83,10 @@ export default function App() {
 
   async function runParser(extended = false) {
     const runLabel = extended ? 'Розширений' : 'Стандартний';
+    if (!runnableNetworks.length) {
+      setLogs((current) => [...current, 'Немає активних мереж для запуску. Оберіть мережу зі статусом active.']);
+      return;
+    }
     setRunning(true);
     setProgress(8);
     setExportUrl('');
@@ -95,19 +101,36 @@ export default function App() {
         const networkCity = item.supported_cities.length && !item.supported_cities.includes(city) ? item.supported_cities[0] : city;
         const fallbackLog = networkCity !== city ? `${item.network_name}: у місті ${city} немає точки, використовую ${networkCity}` : '';
         setLogs((current) => [...current, ...(fallbackLog ? [fallbackLog] : []), `Старт мережі ${index + 1}/${runnableNetworks.length}: ${item.network_name} / ${networkCity}`]);
-        const response = await fetch('/api/parse', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ network: item.network_name, city: networkCity, category, extended })
-        });
-        if (!response.ok) throw new Error(`${item.network_name}: API error ${response.status}`);
-        const result = (await response.json()) as ParseResult;
-        allRows.push(...result.rows);
-        allErrors.push(...result.errors);
-        allLogs.push(...result.logs);
-        setRows([...allRows]);
-        setErrors([...allErrors]);
-        setLogs((current) => [...current, ...result.logs]);
+        try {
+          const result = await fetchJsonWithTimeout<ParseResult>('/api/parse', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ network: item.network_name, city: networkCity, category, extended }),
+            timeoutMs: parseTimeoutMs
+          });
+          allRows.push(...result.rows);
+          allErrors.push(...result.errors);
+          allLogs.push(...result.logs);
+          setRows([...allRows]);
+          setErrors([...allErrors]);
+          setLogs((current) => [...current, ...result.logs]);
+        } catch (error) {
+          const errorText = error instanceof Error ? error.message : String(error);
+          const parseError = {
+            date: new Date().toISOString(),
+            network: item.network_name,
+            city: networkCity,
+            category,
+            url: item.website_url,
+            errorType: 'NETWORK_RUN_FAILED',
+            errorText,
+            manualReview: true
+          } satisfies ParseError;
+          allErrors.push(parseError);
+          allLogs.push(`ERROR ${item.network_name}: ${errorText}`);
+          setErrors([...allErrors]);
+          setLogs((current) => [...current, `ERROR ${item.network_name}: ${errorText}`]);
+        }
         setProgress(Math.min(95, Math.round(((index + 1) / runnableNetworks.length) * 100)));
       }
       setRows(allRows);
@@ -135,38 +158,51 @@ export default function App() {
   }
 
   async function exportExcel() {
-    const response = await fetch('/api/export', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ rows, errors })
-    });
-    const contentType = response.headers.get('content-type') ?? '';
-    if (contentType.includes('spreadsheetml')) {
-      const blob = await response.blob();
-      const url = window.URL.createObjectURL(blob);
-      const disposition = response.headers.get('content-disposition') ?? '';
-      const fileName = disposition.match(/filename="(.+?)"/)?.[1] ?? 'retail-prices.xlsx';
-      const link = document.createElement('a');
-      link.href = url;
-      link.download = fileName;
-      document.body.appendChild(link);
-      link.click();
-      link.remove();
-      window.URL.revokeObjectURL(url);
-      setExportUrl('');
-      return;
+    try {
+      if (!rows.length && !errors.length) {
+        setLogs((current) => [...current, 'Немає даних або помилок для Excel export.']);
+        return;
+      }
+      const response = await fetchWithTimeout('/api/export', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ rows, errors }),
+        timeoutMs: exportTimeoutMs
+      });
+      const contentType = response.headers.get('content-type') ?? '';
+      if (!response.ok) throw new Error(await response.text());
+      if (contentType.includes('spreadsheetml')) {
+        const blob = await response.blob();
+        const url = window.URL.createObjectURL(blob);
+        const disposition = response.headers.get('content-disposition') ?? '';
+        const fileName = disposition.match(/filename="(.+?)"/)?.[1] ?? 'retail-prices.xlsx';
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = fileName;
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+        window.URL.revokeObjectURL(url);
+        setExportUrl('');
+        return;
+      }
+      const data = (await response.json()) as { downloadUrl?: string };
+      if (!data.downloadUrl) throw new Error('Export API did not return downloadUrl');
+      setExportUrl(data.downloadUrl);
+      window.location.href = data.downloadUrl;
+      setLogs((current) => [...current, `Excel export готовий: ${data.downloadUrl}`]);
+    } catch (error) {
+      setLogs((current) => [...current, `ERROR export: ${error instanceof Error ? error.message : String(error)}`]);
     }
-    const data = (await response.json()) as { downloadUrl: string };
-    setExportUrl(data.downloadUrl);
-    window.location.href = data.downloadUrl;
   }
 
   async function importExcel(file: File) {
     setLogs((current) => [...current, `Manual import started: ${file.name}`]);
-    const response = await fetch('/api/import', {
+    const response = await fetchWithTimeout('/api/import', {
       method: 'POST',
       headers: { 'Content-Type': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' },
-      body: await file.arrayBuffer()
+      body: await file.arrayBuffer(),
+      timeoutMs: exportTimeoutMs
     });
     if (!response.ok) {
       const message = await response.text();
@@ -206,7 +242,7 @@ export default function App() {
           <CategorySelect categories={visibleCategories} value={category} onChange={setCategory} />
           <RunParserButton disabled={running || !runnableNetworks.length || !city || !category} onClick={() => void runParser(false)} />
           <ExtendedParserButton disabled={running || !runnableNetworks.length || !city || !category} onClick={() => void runParser(true)} />
-          <ExportButton disabled={!rows.length || running} onClick={exportExcel} />
+          <ExportButton disabled={(!rows.length && !errors.length) || running} onClick={exportExcel} />
           <ImportButton disabled={running} onImport={importExcel} />
           {runnableNetworks.length > 0 && (
             <div className="adapter-note">
@@ -250,6 +286,39 @@ function average(values: Array<number | null>) {
 
 function unique(values: string[]) {
   return Array.from(new Set(values.filter(Boolean)));
+}
+
+async function fetchWithTimeout(url: string, init: RequestInit & { timeoutMs?: number } = {}) {
+  const { timeoutMs = 30000, ...requestInit } = init;
+  const controller = new AbortController();
+  const timeoutId = window.setTimeout(() => controller.abort(), timeoutMs);
+  try {
+    return await fetch(url, { ...requestInit, signal: controller.signal });
+  } catch (error) {
+    if (error instanceof DOMException && error.name === 'AbortError') {
+      throw new Error(`API timeout after ${Math.round(timeoutMs / 1000)}s: ${url}`);
+    }
+    throw error;
+  } finally {
+    window.clearTimeout(timeoutId);
+  }
+}
+
+async function fetchJsonWithTimeout<T>(url: string, init: RequestInit & { timeoutMs?: number; retries?: number } = {}) {
+  const { retries = 0, ...requestInit } = init;
+  let lastError: unknown;
+  for (let attempt = 0; attempt <= retries; attempt += 1) {
+    try {
+      const response = await fetchWithTimeout(url, requestInit);
+      const text = await response.text();
+      if (!response.ok) throw new Error(text || `API error ${response.status}`);
+      return (text ? JSON.parse(text) : {}) as T;
+    } catch (error) {
+      lastError = error;
+      if (attempt < retries) await new Promise((resolve) => window.setTimeout(resolve, 500 * (attempt + 1)));
+    }
+  }
+  throw lastError;
 }
 
 function readStoredResult(): Pick<ParseResult, 'rows' | 'errors' | 'logs'> {
